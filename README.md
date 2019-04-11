@@ -26,8 +26,8 @@
 Clone the repository:
 
 ```
-git clone https://github.com/fexra/turtle-express-starter myproject
-cd myproject
+git clone https://github.com/ExtraHash/SenseiNodeManager/
+cd SenseiNodeManager
 ```
 
 Install dependencies: 
@@ -71,10 +71,10 @@ RECAPTCHA_SECRET_KEY=recaptchasecretkeyhere
 
 Install the nodejs modules:
 
-
 ```
 npm i
 ```
+
 Start the application:
 
 ```
