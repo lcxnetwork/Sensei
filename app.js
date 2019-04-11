@@ -134,7 +134,7 @@ app.get('/', function (req, res) {
     res.redirect('/dashboard')
   } else {
     res.render('public', {
-      title: 'TRTL Services',
+      title: 'LightChain Network',
       user: (req.user) ? req.user : undefined
     })
   }
