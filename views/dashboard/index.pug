@@ -1,10 +1,36 @@
 extends ../includes/layout_default
 
 block content
-
-	section.columns
-
-		.column
-			p This is where you will register your node details.
-		.column
-			p This will be a list of your registered nodes, node statuses, and payout information.
+		section.columns.is-left
+			.column
+				.box.has-background-white.has-text-centered
+					form(method='post', action='/registernode')
+						h1.subtitle.is-size-2.has-text-weight-light.has-text-centered Register A Disciple Node
+						.field
+						.control.has-icons-left
+							input.input.is-large(type='text' name='name' placeholder='enter a name for your node')     
+							span.icon.is-large.is-left
+								i.icon-diamond
+						.field
+						.control.has-icons-left
+							input.input.is-large(type='text' name='ipaddress' placeholder='enter your node ip')
+							span.icon.is-large.is-left
+								i.icon-feed
+						.field
+						.control.has-icons-left
+							input.input.is-large(type='text' name='port' placeholder='enter your rpc port')
+							span.icon.is-large.is-left
+								i.icon-organization
+						.field
+						.control.has-icons-left
+							input.input.is-large(type='text' name='lcxaddress' placeholder='enter your lcx address')
+							span.icon.is-large.is-left
+								i.icon-wallet
+						hr
+						.control
+							button.button.is-large.is-primary.is-fullwidth(type='submit') Submit
+			.column
+				.box.has-background-white.has-text-centered
+					h1.subtitle.is-size-2.has-text-weight-light.has-text-centered Node Uptime Monitor
+					hr
+					span.is-size-5 127.0.0.1 | Status: online | Uptime: 98%
