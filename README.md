@@ -1,8 +1,6 @@
-# TRTL Express Starter
-A boiler template for node.js using express.js for quick development. Comes with user system, dashboard and settings, including 2FA and password management. Further comes with a few small middleware scripts for RabbitMQ, user/input validation and recapcha and 2FA verification. It uses knex.js for sql query building and supports mysql, postgres, sqlite, and oracle. knex.js also builds your database schema for your, see the schema.js file in /utils/db.
+# Sensei Node Manager
 
-![FrontEnd](demo.png)
-![Backend](demo2.png)
+![Screenshot](https://raw.githubusercontent.com/lcxnetwork/SenseiNode/development/screenshot.png "screenshot of sensei node manager")
 
 ## Requirements
 - node.js 8+
@@ -30,8 +28,8 @@ A boiler template for node.js using express.js for quick development. Comes with
 Clone the repository:
 
 ```
-git clone https://github.com/fexra/turtle-express-starter myproject
-cd myproject
+git clone https://github.com/ExtraHash/SenseiNodeManager/
+cd SenseiNodeManager
 ```
 
 Install dependencies: 
@@ -75,10 +73,10 @@ RECAPTCHA_SECRET_KEY=recaptchasecretkeyhere
 
 Install the nodejs modules:
 
-
 ```
 npm i
 ```
+
 Start the application:
 
 ```
