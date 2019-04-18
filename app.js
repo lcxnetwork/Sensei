@@ -229,6 +229,11 @@ passport.authenticate('local-signup', {
   failureFlash: true
 }))
 
+app.post('/registernode', function storeNode(req, res) {
+  console.log(req.body);
+  res.redirect('/');
+})
+
 app.get('/logout', function mainHandler (req, res) {
   req.session.destroy()
   req.logout()
