@@ -51,6 +51,16 @@ module.exports = function(passport) {
             .isEmail()
             .withMessage('Please enter a valid email.')
 
+          req.checkBody('wallet')
+            .not().isEmpty()
+            .trim()
+            .escape()
+            .isLength({
+              min: 97,
+              max: 97
+            })
+            .withMessage('Please enter a valid LCX address.')
+
           req.checkBody('password')
             .not().isEmpty()
             .trim()
@@ -95,12 +105,14 @@ module.exports = function(passport) {
             email: email,
             password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
             recovery: req.body.recovery,
+            wallet: req.body.wallet,
             name: req.body.name,
             role: 'user'
           }
 
           const user = await db('users')
             .insert(userConfig)
+            .limit(1)
 
           userConfig.id = user[0]
           req.session.verified = true
