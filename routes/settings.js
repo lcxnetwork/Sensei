@@ -22,6 +22,24 @@ router.get('/', permission(), async function(req, res, next) {
   })
 })
 
+router.get('/address', permission(), async function(req, res, next) {
+  res.render('settings/address', {
+    title: 'Change Payment Address',
+    user: (req.user) ? req.user : undefined
+  })
+})
+
+router.post('/address', permission(), verify2FA, async function(req, res, next) {
+  await db('users')
+    .update({
+      wallet: req.body.address
+    })
+    .where('id', req.user.id)
+    .limit(1)
+
+  res.redirect('/settings')
+})
+
 router.get('/2fa/new', permission(),
 async function(req, res, next) {
   try {
@@ -31,7 +49,7 @@ async function(req, res, next) {
     }
 
     const secret = speakEasy.generateSecret({
-      name: 'TurtleService - ' + req.user.email
+      name: 'Sensei Node Manager - ' + req.user.email
     })
 
     await db('users')

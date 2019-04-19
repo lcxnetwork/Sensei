@@ -19,6 +19,7 @@ const passport = require('passport')
 const passportStrategy = require('./utils/utils').passport
 const speakEasy = require('speakeasy')
 const uuid = require('uuid/v1')
+const db = require('./utils/utils').knex
 
 // Setup DB if not exist
 require('./utils/db/schema')
@@ -228,11 +229,6 @@ passport.authenticate('local-signup', {
   failureRedirect: '/register',
   failureFlash: true
 }))
-
-app.post('/registernode', function storeNode(req, res) {
-  console.log(req.body);
-  res.redirect('/');
-})
 
 app.get('/logout', function mainHandler (req, res) {
   req.session.destroy()
