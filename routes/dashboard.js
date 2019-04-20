@@ -15,6 +15,8 @@ router.get('/', permission(), async function(req, res, next) {
   .from('users')
   .where('id', req.user.id)
   .limit(1);
+  console.log('string array:\n' + nodeList[0].nodes);
+  console.log('JSON parsed array:\n' + JSON.parse(nodeList[0].nodes));
   res.render('dashboard', {
     title: 'Dashboard',
     nodes: JSON.parse(nodeList[0].nodes),
@@ -44,7 +46,7 @@ router.post('/registernode', permission(), async function(req, res, next) {
 
   await db('users')
     .update({
-      nodes: JSON.stringify(combinedArray),
+      nodes: combinedArray,
     })
     .where('id', req.user.id)
     .limit(1);

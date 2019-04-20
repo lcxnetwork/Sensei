@@ -24,4 +24,6 @@ block content
 				h1.subtitle.is-size-2.has-text-weight-light.has-text-centered Node Uptime Monitor
 				hr
 				span.is-size-5
-					p #{nodes}			
+				ul
+					each val in nodes
+						li= val			
