@@ -1,63 +1,63 @@
 // Copyright (c) 2019, Fexra, The TurtleCoin Developers
 //
 // Please see the included LICENSE file for more information.
-"use strict";
+'use strict';
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const permission = require("permission");
-const db = require("../utils/utils").knex;
-const { check } = require("express-validator/check");
-const validateInput = require("../middleware/validateInput");
+const permission = require('permission');
+const db = require('../utils/utils').knex;
+const { check } = require('express-validator/check');
+const validateInput = require('../middleware/validateInput');
 
 // Welcome + Terms View
-router.get("/", permission(), function(req, res, next) {
+router.get('/', permission(), function(req, res, next) {
   if (req.user.terms == 0) {
-    res.render("welcome", {
-      title: "Welcome",
+    res.render('welcome', {
+      title: 'Welcome',
       user: req.user ? req.user : undefined,
       fee: process.env.TS_FEE,
-      feeSelf: process.env.TS_FEE_SELF
+      feeSelf: process.env.TS_FEE_SELF,
     });
   } else {
-    res.redirect("/dashboard");
+    res.redirect('/dashboard');
   }
 });
 
 router.post(
-  "/",
+  '/',
   permission(),
   [
-    check("termOne")
+    check('termOne')
       .not()
       .isEmpty(),
 
-    check("termTwo")
+    check('termTwo')
       .not()
       .isEmpty(),
 
-    check("termThree")
+    check('termThree')
       .not()
       .isEmpty(),
 
-    check("termFour")
+    check('termFour')
       .not()
-      .isEmpty()
+      .isEmpty(),
   ],
   validateInput,
   async function(req, res, next) {
     try {
-      await db("users")
+      await db('users')
         .update({
-          terms: 1
+          terms: 1,
         })
-        .where("id", req.user.id)
+        .where('id', req.user.id)
         .limit(1);
 
-      res.redirect("/dashboard");
+      res.redirect('/dashboard');
     } catch (err) {
-      req.flash("error", "Please agree to all terms.");
-      res.redirect("/welcome");
+      req.flash('error', 'Please agree to all terms.');
+      res.redirect('/welcome');
     }
   }
 );

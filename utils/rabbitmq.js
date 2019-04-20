@@ -1,11 +1,11 @@
-const amqp = require("amqplib");
+const amqp = require('amqplib');
 
 const connect = (
-  url = "amqp://" +
+  url = 'amqp://' +
     process.env.RABBITMQ_USER +
-    ":" +
+    ':' +
     process.env.RABBITMQ_PASS +
-    "@" +
+    '@' +
     process.env.RABBITMQ_HOST
 ) => {
   return new Promise((resolve, reject) => {
@@ -38,7 +38,7 @@ const sendToQueue = (channel, queueName, buffer) => {
   channel.sendToQueue(queueName, buffer);
 };
 
-const connection = async (queueName = "msg.*") => {
+const connection = async (queueName = 'msg.*') => {
   var conn = await connect();
   var channel = await createChannel(conn);
   var assertedChannelToQueue = await channelAssertQueue(channel, queueName);

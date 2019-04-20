@@ -1,8 +1,8 @@
 // Copyright (c) 2019, Fexra, The TurtleCoin Developers
 //
 // Please see the included LICENSE file for more information.
-"use strict";
-const { validationResult } = require("express-validator/check");
+'use strict';
+const { validationResult } = require('express-validator/check');
 
 function validateInput(req, res, next) {
   try {
@@ -15,7 +15,7 @@ function validateInput(req, res, next) {
         err = err[0].msg;
       }
 
-      req.flash("error", err);
+      req.flash('error', err);
       res.redirect(req.headers.referer);
     } else {
       next();

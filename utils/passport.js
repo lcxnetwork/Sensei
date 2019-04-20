@@ -1,12 +1,12 @@
 // Copyright (c) 2019, Fexra, The TurtleCoin Developers
 //
 // Please see the included LICENSE file for more information.
-"use strict";
+'use strict';
 
-const db = require("../utils/utils").knex;
-const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcrypt");
-const moment = require("moment");
+const db = require('../utils/utils').knex;
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt');
+const moment = require('moment');
 
 module.exports = function(passport) {
   passport.serializeUser(function(user, done) {
@@ -15,9 +15,9 @@ module.exports = function(passport) {
 
   passport.deserializeUser(async function(id, done) {
     try {
-      const user = await db("users")
+      const user = await db('users')
         .select()
-        .where("id", id)
+        .where('id', id)
         .limit(1);
 
       done(null, user[0]);
@@ -27,64 +27,64 @@ module.exports = function(passport) {
   });
 
   passport.use(
-    "local-signup",
+    'local-signup',
     new LocalStrategy(
       {
-        usernameField: "email",
-        passwordField: "password",
-        passReqToCallback: true
+        usernameField: 'email',
+        passwordField: 'password',
+        passReqToCallback: true,
       },
       async function(req, email, password, done) {
         try {
           if (process.env.APP_REGISTRATION === false) {
             throw new Error(
-              "Registration is currently closed. Please check back another time."
+              'Registration is currently closed. Please check back another time.'
             );
           }
 
           req
-            .checkBody("name")
+            .checkBody('name')
             .not()
             .isEmpty()
             .trim()
             .escape()
-            .withMessage("Please enter a valid name.");
+            .withMessage('Please enter a valid name.');
 
           req
-            .checkBody("email")
+            .checkBody('email')
             .not()
             .isEmpty()
             .trim()
             .escape()
             .isEmail()
-            .withMessage("Please enter a valid email.");
+            .withMessage('Please enter a valid email.');
 
           req
-            .checkBody("wallet")
+            .checkBody('wallet')
             .not()
             .isEmpty()
             .trim()
             .escape()
             .isLength({
               min: 97,
-              max: 97
+              max: 97,
             })
-            .withMessage("Please enter a valid LCX address.");
+            .withMessage('Please enter a valid LCX address.');
 
           req
-            .checkBody("password")
+            .checkBody('password')
             .not()
             .isEmpty()
             .trim()
             .escape()
             .isLength({
               min: 8,
-              max: 32
+              max: 32,
             })
-            .withMessage("Please enter a valid password.");
+            .withMessage('Please enter a valid password.');
 
           req
-            .checkBody("confirm")
+            .checkBody('confirm')
             .not()
             .isEmpty()
             .trim()
@@ -92,15 +92,15 @@ module.exports = function(passport) {
             .equals(req.body.password)
             .isLength({
               min: 8,
-              max: 32
+              max: 32,
             })
-            .withMessage("Please confirm your new password.");
+            .withMessage('Please confirm your new password.');
 
           req
-            .checkBody("verify")
+            .checkBody('verify')
             .not()
             .isEmpty()
-            .withMessage("Please accept the terms.");
+            .withMessage('Please accept the terms.');
 
           const err = req.validationErrors();
 
@@ -108,16 +108,16 @@ module.exports = function(passport) {
             throw err;
           }
 
-          const checkUser = await db("users")
+          const checkUser = await db('users')
             .select()
-            .where("email", email)
+            .where('email', email)
             .limit(1);
 
           if (checkUser.length) {
             return done(
               null,
               false,
-              req.flash("error", "This email is already been taken.")
+              req.flash('error', 'This email is already been taken.')
             );
           }
 
@@ -127,10 +127,10 @@ module.exports = function(passport) {
             recovery: req.body.recovery,
             wallet: req.body.wallet,
             name: req.body.name,
-            role: "user"
+            role: 'user',
           };
 
-          const user = await db("users")
+          const user = await db('users')
             .insert(userConfig)
             .limit(1);
 
@@ -143,39 +143,39 @@ module.exports = function(passport) {
             err = err[0].msg;
           }
 
-          return done(null, false, req.flash("error", err));
+          return done(null, false, req.flash('error', err));
         }
       }
     )
   );
 
   passport.use(
-    "local-login",
+    'local-login',
     new LocalStrategy(
       {
-        usernameField: "email",
-        passwordField: "password",
-        passReqToCallback: true
+        usernameField: 'email',
+        passwordField: 'password',
+        passReqToCallback: true,
       },
       async function(req, email, password, done) {
         try {
-          const user = await db("users")
+          const user = await db('users')
             .select()
-            .where("email", email)
+            .where('email', email)
             .limit(1);
 
           if (!user.length || !bcrypt.compareSync(password, user[0].password)) {
             return done(
               null,
               false,
-              req.flash("error", "Wrong login details.")
+              req.flash('error', 'Wrong login details.')
             );
           }
 
-          await db("users")
-            .where("id", user[0].id)
+          await db('users')
+            .where('id', user[0].id)
             .update({
-              seen: moment().format("YYYY-MM-DD HH:mm")
+              seen: moment().format('YYYY-MM-DD HH:mm'),
             });
 
           return done(null, user[0]);
@@ -184,7 +184,7 @@ module.exports = function(passport) {
           if (err[0].msg) {
             err = err[0].msg;
           }
-          return done(null, false, req.flash("error", err));
+          return done(null, false, req.flash('error', err));
         }
       }
     )

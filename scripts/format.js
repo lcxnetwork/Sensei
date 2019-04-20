@@ -1,17 +1,17 @@
 // Copyright (c) 2019, Fexra, The TurtleCoin Developers
 //
 // Please see the included LICENSE file for more information.
-"use strict";
+'use strict';
 
-const jsBeautify = require("js-beautify")["js_beautify"];
-const fs = require("fs");
-const glob = require("glob");
+const jsBeautify = require('js-beautify')['js_beautify'];
+const fs = require('fs');
+const glob = require('glob');
 
 const options = {
   indent_size: 2,
-  indent_char: " ",
+  indent_char: ' ',
   indent_with_tabs: false,
-  eol: "\n",
+  eol: '\n',
   end_with_newline: true,
   indent_level: 0,
   preserve_newlines: true,
@@ -20,27 +20,27 @@ const options = {
   space_in_empty_paren: false,
   jslint_happy: false,
   space_after_anon_function: false,
-  brace_style: "collapse",
+  brace_style: 'collapse',
   break_chained_methods: false,
   keep_array_indentation: false,
   unescape_strings: false,
   wrap_line_length: 0,
   e4x: false,
   comma_first: false,
-  operator_position: "before-newline"
+  operator_position: 'before-newline',
 };
 
 glob(
-  "**/!(node_modules)/**/*.js",
+  '**/!(node_modules)/**/*.js',
   {
-    absolute: true
+    absolute: true,
   },
   (er, files) => {
     files.forEach(file => {
       console.log(`js-beautify ${file}`);
-      const data = fs.readFileSync(file, "utf8");
+      const data = fs.readFileSync(file, 'utf8');
       const nextData = jsBeautify(data, options);
-      fs.writeFileSync(file, nextData, "utf8");
+      fs.writeFileSync(file, nextData, 'utf8');
     });
   }
 );
