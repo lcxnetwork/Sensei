@@ -1,26 +1,26 @@
 extends ../includes/layout_default
 
 block content
-		section.columns.is-left
-			.column
-				.box.has-background-white.has-text-centered
-					form(method='post', action='/registernode')
-						h1.subtitle.is-size-2.has-text-weight-light.has-text-centered Register A Disciple Node
-						.field
-						.control.has-icons-left
-							input.input.is-large(type='text' name='ip' placeholder='enter your node ip')
-							span.icon.is-large.is-left
-								i.icon-feed
-						.field
-						.control.has-icons-left
-							input.input.is-large(type='text' name='port' placeholder='enter your rpc port')
-							span.icon.is-large.is-left
-								i.icon-organization
-						hr
-						.control
-							button.button.is-large.is-primary.is-fullwidth(type='submit') Submit
-			.column
-				.box.has-background-white.has-text-centered
-					h1.subtitle.is-size-2.has-text-weight-light.has-text-centered Node Uptime Monitor
+	section.columns.is-left
+		.column
+			.box.has-background-white.has-text-centered
+				form(method='post', action='/registernode')
+					h1.subtitle.is-size-2.has-text-weight-light.has-text-centered Register A Disciple Node
+					.field
+					.control.has-icons-left
+						input.input.is-large(type='text' name='ip' placeholder='enter your node ip')
+						span.icon.is-large.is-left
+							i.icon-feed
+					.field
+					.control.has-icons-left
+						input.input.is-large(type='text' name='port' placeholder='enter your rpc port')
+						span.icon.is-large.is-left
+							i.icon-organization
 					hr
-					span.is-size-5 127.0.0.1 | Status: online | Uptime: 98%
+					.control
+						button.button.is-large.is-primary.is-fullwidth(type='submit') Submit
+		.column
+			.box.has-background-white.has-text-centered
+				h1.subtitle.is-size-2.has-text-weight-light.has-text-centered Node Uptime Monitor
+				hr
+				span.is-size-5 127.0.0.1 | Status: online | Uptime: 98%
