@@ -23,8 +23,14 @@ router.get('/', permission(), async function(req, res, next) {
 })
 
 router.get('/address', permission(), async function(req, res, next) {
+  const address = await db('users')
+  .select('wallet')
+  .from('users')
+  .where('id', req.user.id)
+  .limit(1)
   res.render('settings/address', {
     title: 'Change Payment Address',
+    address: address[0].wallet,
     user: (req.user) ? req.user : undefined
   })
 })

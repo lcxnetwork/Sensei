@@ -19,7 +19,6 @@ const passport = require('passport')
 const passportStrategy = require('./utils/utils').passport
 const speakEasy = require('speakeasy')
 const uuid = require('uuid/v1')
-const db = require('./utils/utils').knex
 
 // Setup DB if not exist
 require('./utils/db/schema')
