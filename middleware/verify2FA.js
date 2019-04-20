@@ -1,31 +1,31 @@
 // Copyright (c) 2019, Fexra, The TurtleCoin Developers
 //
 // Please see the included LICENSE file for more information.
-'use strict'
+"use strict";
 
-const speakEasy = require('speakeasy')
+const speakEasy = require("speakeasy");
 
 async function verify2FA(req, res, next) {
   try {
     if (req.user && req.user.verified === 1) {
       const verify = await speakEasy.totp.verify({
         secret: req.user.secret,
-        encoding: 'base32',
+        encoding: "base32",
         token: req.body.token
-      })
+      });
 
       if (verify === false) {
-        req.flash('warning', 'You have entered an invalid token.')
-        return res.redirect('/dashboard')
+        req.flash("warning", "You have entered an invalid token.");
+        return res.redirect("/dashboard");
       } else {
-        return next()
+        return next();
       }
     } else {
-      return next()
+      return next();
     }
   } catch (err) {
-    next(err)
+    next(err);
   }
 }
 
-module.exports = verify2FA
+module.exports = verify2FA;
