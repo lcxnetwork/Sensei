@@ -16,6 +16,10 @@ router.get('/', permission(), async function(req, res, next) {
   });
 });
 
+router.get('/registernode', permission(), async function(req, res, next) {
+  res.redirect('/');
+});
+
 router.post('/registernode', permission(), async function(req, res, next) {
   const ipPort = `${req.body.ip}:${req.bodyport}`;
   console.log(ipPort);
@@ -25,8 +29,6 @@ router.post('/registernode', permission(), async function(req, res, next) {
     })
     .where('id', req.user.id)
     .limit(1);
-
-  res.redirect('/');
 });
 
 module.exports = router;
