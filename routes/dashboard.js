@@ -25,7 +25,7 @@ router.post('/registernode', permission(), async function(req, res, next) {
     })
     .where('id', req.user.id)
     .limit(1);
-  res.redirect('/dashboard');
+  res.redirect('/');
 });
 
 module.exports = router;
