@@ -15,8 +15,6 @@ router.get('/', permission(), async function(req, res, next) {
   .from('users')
   .where('id', req.user.id)
   .limit(1);
-  console.log('string array:\n' + nodeList[0].nodes);
-  console.log('JSON parsed array:\n' + JSON.parse(nodeList[0].nodes));
   res.render('dashboard', {
     title: 'Dashboard',
     nodes: JSON.parse(nodeList[0].nodes),
@@ -29,21 +27,13 @@ router.post('/registernode', permission(), async function(req, res, next) {
   const ipArray = [];
   ipArray.push(ipPort);
   console.log(ipArray);
-
   const nodeList = await db('users')
   .select('nodes')
   .from('users')
   .where('id', req.user.id)
   .limit(1);
-
   const oldNodeArray = JSON.parse(nodeList[0].nodes);
-  console.log(oldNodeArray);
-
   const combinedArray = oldNodeArray.concat(ipArray);
-  console.log(combinedArray);
-
-
-
   await db('users')
     .update({
       nodes: combinedArray,
