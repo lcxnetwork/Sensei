@@ -4,7 +4,7 @@ block content
 	section.columns.is-left
 		.column
 			.box.has-background-white.has-text-centered
-				form(method='post', action='/registernode')
+				form(method='post', action='/dashboard/registernode')
 					h1.subtitle.is-size-2.has-text-weight-light.has-text-centered Register A Disciple Node
 					.field
 					.control.has-icons-left
@@ -23,4 +23,4 @@ block content
 			.box.has-background-white.has-text-centered
 				h1.subtitle.is-size-2.has-text-weight-light.has-text-centered Node Uptime Monitor
 				hr
-				span.is-size-5 127.0.0.1 | Status: online | Uptime: 98%
+				span.is-size-5 #{nodes}
