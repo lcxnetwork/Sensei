@@ -17,7 +17,7 @@ router.get('/', permission(), async function(req, res, next) {
   .limit(1);
   res.render('dashboard', {
     title: 'Dashboard',
-    nodes: nodeList[0].nodes,
+    nodes: JSON.parse(nodeList[0].nodes),
     user: req.user ? req.user : undefined,
   });
 });
