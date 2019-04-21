@@ -15,8 +15,6 @@ router.get('/', permission(), async function(req, res, next) {
   .from('users')
   .where('id', req.user.id)
   .limit(1);
-  console.log('string array:\n' + nodeList[0].nodes);
-  console.log('JSON parsed array:\n' + JSON.parse(nodeList[0].nodes));
   res.render('dashboard', {
     title: 'Dashboard',
     nodes: JSON.parse(nodeList[0].nodes),
@@ -29,28 +27,44 @@ router.post('/registernode', permission(), async function(req, res, next) {
   const ipArray = [];
   ipArray.push(ipPort);
   console.log(ipArray);
-
   const nodeList = await db('users')
   .select('nodes')
   .from('users')
   .where('id', req.user.id)
-  //.limit(1);
-
+  .limit(1);
   const oldNodeArray = JSON.parse(nodeList[0].nodes);
-  console.log(oldNodeArray);
-
-  const combinedArray = oldNodeArray.concat(ipArray);
-  console.log(combinedArray);
-
-
-
+  const modifiedArray = oldNodeArray.concat(ipArray);
   await db('users')
     .update({
-      nodes: JSON.stringify(combinedArray),
+      nodes: JSON.stringify(modifiedArray),
     })
     .where('id', req.user.id)
     .limit(1);
   res.redirect('/');
 });
 
+router.get('/deletenode/:index', permission(), async function(req, res, next) {
+  const delIndex = req.params.index;
+  console.log('Request to delete index ' + delIndex + ', getting current node list...');
+  const nodeList = await db('users')
+  .select('nodes')
+  .from('users')
+  .where('id', req.user.id)
+  .limit(1);
+  console.log('Current node list retrieved: ' + JSON.stringify(nodeList));
+  const oldNodeArray = JSON.parse(nodeList[0].nodes);
+  console.log('Extracted old node array from database call: ' + oldNodeArray);
+  oldNodeArray.splice(delIndex, 1);
+  const modifiedArray = oldNodeArray;
+  console.log('Removed requested index from array, new array: ' + modifiedArray);
+  await db('users')
+    .update({
+      nodes: JSON.stringify(modifiedArray),
+    })
+    .where('id', req.user.id)
+    .limit(1);
+  console.log('Wrote modified array to database: ' + modifiedArray);
+  res.redirect('/');
+})
+ 
 module.exports = router;

@@ -21,9 +21,11 @@ block content
 						button.button.is-large.is-primary.is-fullwidth(type='submit') Submit
 		.column
 			.box.has-background-white.has-text-centered
-				h1.subtitle.is-size-2.has-text-weight-light.has-text-centered Node Uptime Monitor
-				hr
-				span.is-size-5
-				ul
-					each val in nodes
-						li= val			
+				.column
+					h1.subtitle.is-size-2.has-text-weight-light.has-text-centered Node Uptime Monitor
+					hr
+					span.is-size-5
+					ul
+						each val, index in nodes
+							li= val 
+							a.button.btn.btn-sm(href=`/dashboard/deletenode/` + index) Delete
