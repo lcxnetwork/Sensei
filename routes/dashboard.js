@@ -15,11 +15,21 @@ router.get('/', permission(), async function(req, res, next) {
   .from('users')
   .where('id', req.user.id)
   .limit(1);
-  res.render('dashboard', {
-    title: 'Dashboard',
-    nodes: JSON.parse(nodeList[0].nodes),
-    user: req.user ? req.user : undefined,
-  });
+  if (nodeList[0].nodes === null) {
+    console.log('null nodelist: ' + nodeList[0].nodes);
+    res.render('dashboard', {
+      title: 'Dashboard',
+      nodes: JSON.parse('[]'),
+      user: req.user ? req.user : undefined,
+    });
+  } else {
+    console.log(nodeList);
+    res.render('dashboard', {
+      title: 'Dashboard',
+      nodes: JSON.parse(nodeList[0].nodes),
+      user: req.user ? req.user : undefined,
+    });
+  }
 });
 
 router.post('/registernode', permission(), async function(req, res, next) {
@@ -33,6 +43,14 @@ router.post('/registernode', permission(), async function(req, res, next) {
   .where('id', req.user.id)
   .limit(1);
   const oldNodeArray = JSON.parse(nodeList[0].nodes);
+  if (oldNodeArray === null) {
+    await db('users')
+      .update({
+        nodes: JSON.stringify(ipArray),
+      })
+      .where('id', req.user.id)
+      .limit(1);
+  } else {
   const modifiedArray = oldNodeArray.concat(ipArray);
   await db('users')
     .update({
@@ -40,6 +58,7 @@ router.post('/registernode', permission(), async function(req, res, next) {
     })
     .where('id', req.user.id)
     .limit(1);
+  }
   res.redirect('/');
 });
 
