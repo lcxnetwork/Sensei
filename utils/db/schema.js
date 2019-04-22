@@ -27,15 +27,3 @@ db.schema.hasTable('users').then(function(exists) {
     });
   }
 });
-db.schema.hasTable('nodes').then(function(exists) {
-  if (!exists) {
-    return db.schema.createTable('nodes', function(table) {
-      table.increments();
-      table.string('userid');
-      table.string('ipaddress');
-      table.json('24hruptime');
-      table.json('balance');
-      table.json('payments');
-    })
-  }
-})
