@@ -9,9 +9,8 @@ const bcrypt = require('bcrypt');
 const moment = require('moment');
 const crypto = require('crypto');
 
-async function generateKey() {
-  const key = await crypto.randomBytes(32).toString('hex');
-  return key;
+function generateKey() {
+  return crypto.randomBytes(16).toString('hex');
 }
 
 module.exports = function(passport) {
@@ -127,7 +126,8 @@ module.exports = function(passport) {
             );
           }
 
-          const validationKey = await generateKey();
+          const validationKey = generateKey();
+          //console.log(validationKey());
 
           const userConfig = {
             email: email,
@@ -148,10 +148,10 @@ module.exports = function(passport) {
           return done(null, userConfig);
         } catch (err) {
           // fix
-          if (err[0].msg) {
-            err = err[0].msg;
-          }
-
+          //if (err[0].msg) {
+          //  err = err[0].msg;
+          // }
+          console.log(JSON.stringify(err));
           return done(null, false, req.flash('error', err));
         }
       }
