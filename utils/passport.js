@@ -7,6 +7,7 @@ const db = require('../utils/utils').knex;
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const moment = require('moment');
+const crypto = require('crypto');
 
 async function generateKey() {
   const key = await crypto.randomBytes(32).toString('hex');
@@ -126,9 +127,8 @@ module.exports = function(passport) {
             );
           }
 
-          // const validationKey = await crypto.randomBytes(32).toString('hex');
-          // console.log(validationKey);
-
+          const validationKey = generateKey();
+          
           const userConfig = {
             email: email,
             password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
@@ -136,7 +136,7 @@ module.exports = function(passport) {
             wallet: req.body.wallet,
             name: req.body.name,
             role: 'user',
-            // validationkey: validationKey,
+            validationkey: validationKey,
           };
 
           const user = await db('users')
