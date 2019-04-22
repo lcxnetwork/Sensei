@@ -8,6 +8,11 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const moment = require('moment');
 
+async function generateKey() {
+  const key = await crypto.randomBytes(32).toString('hex');
+  return key;
+}
+
 module.exports = function(passport) {
   passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -121,6 +126,9 @@ module.exports = function(passport) {
             );
           }
 
+          // const validationKey = await crypto.randomBytes(32).toString('hex');
+          // console.log(validationKey);
+
           const userConfig = {
             email: email,
             password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
@@ -128,6 +136,7 @@ module.exports = function(passport) {
             wallet: req.body.wallet,
             name: req.body.name,
             role: 'user',
+            // validationkey: validationKey,
           };
 
           const user = await db('users')
