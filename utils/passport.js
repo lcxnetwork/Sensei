@@ -127,8 +127,8 @@ module.exports = function(passport) {
             );
           }
 
-          const validationKey = generateKey();
-          
+          const validationKey = await generateKey();
+
           const userConfig = {
             email: email,
             password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
