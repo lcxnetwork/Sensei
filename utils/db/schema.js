@@ -15,6 +15,7 @@ db.schema.hasTable('users').then(function(exists) {
       table.string('password', 1024);
       table.string('recovery');
       table.string('secret');
+      table.string('validationkey');
       table.string('wallet');
       table.json('nodes');
       table.integer('verified').defaultTo(0);
