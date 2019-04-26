@@ -17,7 +17,6 @@ db.schema.hasTable('users').then(function(exists) {
       table.string('secret');
       table.string('validationkey');
       table.string('wallet');
-      table.json('nodes');
       table.integer('verified').defaultTo(0);
       table.string('name');
       table.string('role');
@@ -25,6 +24,25 @@ db.schema.hasTable('users').then(function(exists) {
       table.integer('terms').defaultTo(0);
       table.datetime('seen');
       table.datetime('created').defaultTo(db.fn.now());
+    });
+  }
+});
+
+db.schema.hasTable('nodes').then(function(exists) {
+  if (!exists) {
+    return db.schema.createTable('nodes', function(table) {
+      table.string('id');
+      table.string('ip');
+    });
+  }
+});
+
+db.schema.hasTable('pings').then(function(exists) {
+  if (!exists) {
+    return db.schema.createTable('pings', function(table) {
+      table.string('id');
+      table.string('ip');
+      table.boolean('check')
     });
   }
 });
