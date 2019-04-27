@@ -144,6 +144,13 @@ module.exports = function(passport) {
             .limit(1);
 
           userConfig.id = user[0];
+
+          await db('shares')
+            .insert({ id: userConfig.id })
+            .limit(1);
+
+          console.log(userConfig.id);
+
           req.session.verified = true;
           return done(null, userConfig);
         } catch (err) {

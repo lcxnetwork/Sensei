@@ -40,9 +40,18 @@ db.schema.hasTable('nodes').then(function(exists) {
 db.schema.hasTable('pings').then(function(exists) {
   if (!exists) {
     return db.schema.createTable('pings', function(table) {
+      table.datetime('timestamp').defaultTo(db.fn.now());
       table.string('id');
       table.string('ip');
-      table.boolean('check')
+    });
+  }
+});
+
+db.schema.hasTable('shares').then(function(exists) {
+  if (!exists) {
+    return db.schema.createTable('shares', function(table) {
+      table.string('id');
+      table.integer('shares');
     });
   }
 });
