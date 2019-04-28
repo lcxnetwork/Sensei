@@ -1,6 +1,7 @@
 // Copyright (c) 2019, Fexra, The TurtleCoin Developers
 //
 // Please see the included LICENSE file for more information.
+
 'use strict';
 
 const db = require('../utils/utils').knex;
