@@ -52,6 +52,7 @@ db.schema.hasTable('shares').then(function(exists) {
     return db.schema.createTable('shares', function(table) {
       table.string('id');
       table.integer('shares');
+      table.integer('percent');
     });
   }
 });
