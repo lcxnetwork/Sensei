@@ -60,9 +60,11 @@ db.schema.hasTable('shares').then(function(exists) {
 db.schema.hasTable('payments').then(function(exists) {
   if (!exists) {
     return db.schema.createTable('payments', function(table) {
-      table.datetime('timestamp').defaultTo(db.fn.now());
       table.string('id');
-      table.string('amount');
+      table.string('address')
+      table.integer('amount');
+      table.string('nonce');
+      table.boolean('pending');
       table.string('hash');
     });
   }
