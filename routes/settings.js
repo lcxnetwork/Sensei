@@ -13,6 +13,8 @@ const validateInput = require('../middleware/validateInput');
 const speakEasy = require('speakeasy');
 const QR = require('qrcode');
 const bcrypt = require('bcrypt');
+const WB = require('lightchain-wallet-backend');
+
 
 // Preference Panel
 router.get('/', permission(), async function(req, res, next) {
@@ -35,19 +37,34 @@ router.get('/address', permission(), async function(req, res, next) {
   });
 });
 
-router.post('/address', permission(), verify2FA, async function(
-  req,
-  res,
-  next
-) {
+router.post('/address', permission(), verify2FA, async function(req, res, next) {
+  try {
+        const address = req.body.wallet
+        const validity = WB.validateAddresses([address]);
+        if (validity.errorCode) {
+          console.log(validity);
+          throw new Error(
+            'Please enter a valid LCX address.'
+          );
+        }
+
+  let err = req.validationErrors();
+  if (err) {
+    throw err;
+  }
+
   await db('users')
     .update({
-      wallet: req.body.address,
+      wallet: req.body.wallet,
     })
     .where('id', req.user.id)
     .limit(1);
-
-  res.redirect('/settings');
+  res.redirect('/settings'); 
+  } catch (err) {
+    req.flash('error', err.toString());
+    console.log(err);
+    res.redirect('/settings');
+  }
 });
 
 router.get('/2fa/new', permission(), async function(req, res, next) {

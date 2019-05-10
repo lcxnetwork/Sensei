@@ -5,7 +5,7 @@ block content
 		.column
 			.box.has-background-white.has-text-centered
 				form(method='post', action='/dashboard/registernode')
-					h1.subtitle.is-size-2.has-text-weight-light.has-text-centered Register A Disciple Node
+					h1.subtitle.is-size-2.has-text-weight-light.has-text-left Register A Disciple Node
 					.field
 					.control.has-icons-left
 						input.input.is-large(type='text' name='ip' placeholder='enter your node ip')
@@ -22,10 +22,32 @@ block content
 		.column
 			.box.has-background-white.has-text-centered
 				.column
-					h1.subtitle.is-size-2.has-text-weight-light.has-text-centered Node Uptime Monitor
+					h1.subtitle.is-size-2.has-text-weight-light.has-text-left Node List
 					hr
 					span.is-size-5
-					ul
+					table.table.table-striped
+						tr
+							th Node
+							th Last Seen
+							th Delete
 						each val, index in nodes
-							li= val 
-							a.button.btn.btn-sm(href=`/dashboard/deletenode/` + index) Delete
+							tr
+								td= val
+								td= lastseen[index]
+								td
+									a.button.btn.btn-sm(href=`/dashboard/deletenode/` + index) Delete
+
+
+	section.columns.is-left
+		.column
+			.box.has-background-white.has-text-centered
+				table.table.table-striped
+					tr
+						th Time
+						th Transaction Hash
+						th Amount
+					each val in payments
+						tr
+							td= val[0]
+							td= val[1]
+							td= val[2]

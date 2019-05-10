@@ -1,9 +1,11 @@
 // Copyright (c) 2019, Fexra, The TurtleCoin Developers
+// Copyright (c) 2019 ExtraHash, The LightChain Developers
 //
 // Please see the included LICENSE file for more information.
 
 'use strict';
 
+const WB = require('lightchain-wallet-backend');
 const db = require('../utils/utils').knex;
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
@@ -71,12 +73,8 @@ module.exports = function(passport) {
             .isEmpty()
             .trim()
             .escape()
-            .isLength({
-              min: 97,
-              max: 97,
-            })
-            .withMessage('Please enter a valid LCX address.');
-
+            .withMessage('Please enter a valid LCX Address.');
+            
           req
             .checkBody('password')
             .not()
@@ -108,9 +106,16 @@ module.exports = function(passport) {
             .isEmpty()
             .withMessage('Please accept the terms.');
 
-          const err = req.validationErrors();
+          let err = req.validationErrors();
 
           if (err) {
+            throw err;
+          }
+
+          const address = req.body.wallet
+          const validity = WB.validateAddresses([address]);
+          if (validity.errorCode) {
+            err = 'Please enter a valid LCX address.';
             throw err;
           }
 
@@ -155,12 +160,12 @@ module.exports = function(passport) {
           req.session.verified = true;
           return done(null, userConfig);
         } catch (err) {
-          // fix
+          //fix
           //if (err[0].msg) {
-          //  err = err[0].msg;
-          // }
+          //err = err[0].msg;
+          //}
           console.log(JSON.stringify(err));
-          return done(null, false, req.flash('error', err));
+          return done(null, false, req.flash('error', err.toString()));
         }
       }
     )
