@@ -8,6 +8,7 @@ const router = express.Router();
 const permission = require('permission');
 const db = require('../utils/utils').knex;
 
+
 // Preference Panel
 router.get('/', permission(), async function(req, res, next) {
   const nodeArray = await getNodeArray(req);
@@ -25,21 +26,34 @@ router.get('/', permission(), async function(req, res, next) {
 });
 
 router.post('/registernode', permission(), async function(req, res, next) {
-  const ipPort = `${req.body.ip}:${req.body.port}`;
-  await db('nodes')
+  try {
+  if (isIP(req.body.ip) && isPort(req.body.port)) {
+    const ipPort = `${req.body.ip}:${req.body.port}`;
+    await db('nodes')
     .insert({
       id: req.user.id,
       ip: ipPort
     })
     .where('id', req.user.id)
     .limit(1);
+  } else {
+    throw new Error(
+      'Please enter a valid IP address.'
+    );
+  }
+  let err = req.validationErrors();
+  if (err) {
+    throw err;
+  }
   res.redirect('/');
+  } catch (err) {
+    req.flash('error', err.toString());
+    console.log(err);
+    res.redirect('/');  }
 });
 
 router.get('/deletenode/:index', permission(), async function(req, res, next) {
   const nodeArray = await getNodeArray(req);
-  console.log(req.user.id);
-  console.log(nodeArray[req.params.index]);
   await db('nodes')
   .where({
   id: req.user.id,
@@ -90,5 +104,18 @@ function convertTimestamp(timestamp) {
   time = yyyy + '-' + mm + '-' + dd + ', ' + hh + ':' + min;
   return time;
 };
+
+function isIP(ipaddress) {  
+  if(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {  
+    return true;  
+  }  
+  return false;  
+}  
  
+function isPort(port) {
+  if(port > 0 && port <= 65535) {
+    return true;
+  }
+  return false;
+}
 module.exports = router;
