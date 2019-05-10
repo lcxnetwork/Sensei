@@ -8,7 +8,8 @@ const express = require('express');
 const router = express.Router();
 const permission = require('permission');
 const db = require('../utils/utils').knex;
-
+const { check } = require('express-validator/check');
+const validateInput = require('../middleware/validateInput');
 
 // Preference Panel
 router.get('/', permission(), async function(req, res, next) {
@@ -26,10 +27,22 @@ router.get('/', permission(), async function(req, res, next) {
   });
 });
 
-router.post('/registernode', permission(), async function(req, res, next) {
+router.post('/registernode',  permission(),
+[
+  check('ip')
+    .isIP()
+    .withMessage('Please enter a valid IP Address.'),
+    check('port')
+    .isPort()
+    .withMessage('Please enter a valid port.'),
+],
+validateInput,
+async function(req, res, next) {
   try {
-  if (isIP(req.body.ip) && isPort(req.body.port)) {
+
     const ipPort = `${req.body.ip}:${req.body.port}`;
+
+    // Insert node
     await db('nodes')
     .insert({
       id: req.user.id,
@@ -37,23 +50,19 @@ router.post('/registernode', permission(), async function(req, res, next) {
     })
     .where('id', req.user.id)
     .limit(1);
-  } else {
-    throw new Error(
-      'Please enter a valid IP address.'
-    );
-  }
-  let err = req.validationErrors();
-  if (err) {
-    throw err;
-  }
-  res.redirect('/');
+
+    res.redirect('/');
+
   } catch (err) {
     req.flash('error', err.toString());
-    console.log(err);
-    res.redirect('/');  }
+    res.redirect('/');
+  }
 });
 
-router.get('/deletenode/:index', permission(), async function(req, res, next) {
+router.get('/deletenode/:index', permission(),
+
+
+async function(req, res, next) {
   const nodeArray = await getNodeArray(req);
   await db('nodes')
   .where({
