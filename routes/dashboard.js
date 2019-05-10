@@ -1,4 +1,5 @@
 // Copyright (c) 2019, Fexra, The TurtleCoin Developers
+// Copyright (c) 2019, Fexra, The LightChain Developers
 //
 // Please see the included LICENSE file for more information.
 'use strict';
