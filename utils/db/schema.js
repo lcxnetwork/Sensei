@@ -33,6 +33,8 @@ db.schema.hasTable('nodes').then(function(exists) {
     return db.schema.createTable('nodes', function(table) {
       table.string('id');
       table.string('ip');
+      table.string('port');
+      table.string('connectionstring');
     });
   }
 });
@@ -43,6 +45,7 @@ db.schema.hasTable('pings').then(function(exists) {
       table.datetime('timestamp').defaultTo(db.fn.now());
       table.string('id');
       table.string('ip');
+      table.string('connectionstring');
     });
   }
 });

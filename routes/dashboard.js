@@ -40,13 +40,30 @@ validateInput,
 async function(req, res, next) {
   try {
 
+    const dupCheck = await db('nodes')
+    .where({
+      ip: req.body.ip,
+      id: req.user.id})
+    if (dupCheck.length) {
+      console.log(dupCheck.length);
+      throw new Error(
+        'You have already registered this IP.'
+      );
+    }
+    let err = req.validationErrors();
+    if (err) {
+      throw err;
+    }
+
     const ipPort = `${req.body.ip}:${req.body.port}`;
 
     // Insert node
     await db('nodes')
     .insert({
       id: req.user.id,
-      ip: ipPort
+      ip: req.body.ip,
+      port: req.body.port,
+      connectionstring: ipPort
     })
     .where('id', req.user.id)
     .limit(1);
@@ -54,6 +71,7 @@ async function(req, res, next) {
     res.redirect('/');
 
   } catch (err) {
+    console.log(err);
     req.flash('error', err.toString());
     res.redirect('/');
   }

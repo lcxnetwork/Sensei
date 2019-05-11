@@ -43,7 +43,6 @@ router.post('/address', permission(), verify2FA, async function(req, res, next) 
         const address = req.body.wallet
         const validity = WB.validateAddresses([address]);
         if (validity.errorCode) {
-          console.log(validity);
           throw new Error(
             'Please enter a valid LCX address.'
           );
