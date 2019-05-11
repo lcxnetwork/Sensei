@@ -32,7 +32,7 @@ router.post('/registernode',  permission(),
   check('ip')
     .isIP()
     .withMessage('Please enter a valid IP Address.'),
-    check('port')
+  check('port')
     .isPort()
     .withMessage('Please enter a valid port.'),
 ],
@@ -115,17 +115,4 @@ function convertTimestamp(timestamp) {
   return time;
 };
 
-function isIP(ipaddress) {  
-  if(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {  
-    return true;  
-  }  
-  return false;  
-}  
- 
-function isPort(port) {
-  if(port > 0 && port <= 65535) {
-    return true;
-  }
-  return false;
-}
 module.exports = router;
