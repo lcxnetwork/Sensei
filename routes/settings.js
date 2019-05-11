@@ -39,32 +39,26 @@ router.get('/address', permission(), async function(req, res, next) {
 });
 
 router.post('/address', permission(), verify2FA, async function(req, res, next) {
-  try {
+    try {
         const address = req.body.wallet
         const validity = WB.validateAddresses([address]);
         if (validity.errorCode) {
-          throw new Error(
-            'Please enter a valid LCX address.'
-          );
+            throw new Error(
+                'Please enter a valid LCX address.'
+            );
         }
-
-  let err = req.validationErrors();
-  if (err) {
-    throw err;
-  }
-
-  await db('users')
-    .update({
-      wallet: req.body.wallet,
-    })
-    .where('id', req.user.id)
-    .limit(1);
-  res.redirect('/settings'); 
-  } catch (err) {
-    req.flash('error', err.toString());
-    console.log(err);
-    res.redirect('/settings');
-  }
+        await db('users')
+            .update({
+                wallet: req.body.wallet,
+            })
+            .where('id', req.user.id)
+            .limit(1);
+        res.redirect('/settings');
+    } catch (err) {
+        req.flash('error', err.toString());
+        console.log(err);
+        res.redirect('/settings');
+    }
 });
 
 router.get('/2fa/new', permission(), async function(req, res, next) {

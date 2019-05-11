@@ -5,7 +5,7 @@ block content
 		.column
 			.box.has-background-white.has-text-centered
 				form(method='post', action='/dashboard/registernode')
-					h1.subtitle.is-size-2.has-text-weight-light.has-text-left Register A Disciple Node
+					h1.subtitle.is-size-2.has-text-weight-light.has-text-left Register A Node
 					.field
 					.control.has-icons-left
 						input.input.is-large(type='text' name='ip' placeholder='enter your node ip')
@@ -19,11 +19,15 @@ block content
 					hr
 					.control
 						button.button.is-large.is-primary.is-fullwidth(type='submit') Submit
+					br
+					p.has-text-left  Ensure your daemon is reachable from the inteand launch it with these flags:
+					p.has-text-left ./LightChaind --enable-blockexplorer --enable-cors "*" --validate #{validatestring}
+
+	section.columns.is-left
 		.column
 			.box.has-background-white.has-text-centered
 				.column
 					h1.subtitle.is-size-2.has-text-weight-light.has-text-left Node List
-					hr
 					span.is-size-5
 					table.table.table-striped
 						tr
@@ -36,18 +40,18 @@ block content
 								td= lastseen[index]
 								td
 									a.button.btn.btn-sm(href=`/dashboard/deletenode/` + index) Delete
-
-
 	section.columns.is-left
-		.column
-			.box.has-background-white.has-text-centered
-				table.table.table-striped
+	.column
+		.box.has-background-white.has-text-centered
+			h1.subtitle.is-size-2.has-text-weight-light.has-text-left Recent Payments
+			table.table.table-striped
+				tr
+					th Time
+					th Transaction Hash
+					th Amount
+				each val in payments
 					tr
-						th Time
-						th Transaction Hash
-						th Amount
-					each val in payments
-						tr
-							td= val[0]
-							td= val[1]
-							td= val[2]
+						td= val[0]
+						td
+							a(href='http://explorer.lightchain.net/transaction.html?hash=' + val[1]) #{val[1]}
+						td= val[2]

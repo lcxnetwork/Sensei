@@ -17,12 +17,14 @@ router.get('/', permission(), async function(req, res, next) {
   const lastSeenPromises = nodeArray.map(item => getLastShare(item));
   const lastSeen = await Promise.all(lastSeenPromises)
   const paymentsArray = await getPaymentsArray(req);
+  const validationKey = await getValidateKey(req);
 
   res.render('dashboard', {
     title: 'Dashboard',
     nodes: nodeArray,
     payments: paymentsArray,
     lastseen: lastSeen,
+    validatestring: validationKey,
     user: req.user ? req.user : undefined,
   });
 });
@@ -111,12 +113,21 @@ function getNodeArray(req) {
   .map(a => a.ip);
 }
 
+function getValidateKey(req) {
+  return db('users')
+  .select('validationkey')
+  .from('users')
+  .where('id', req.user.id)
+  .limit(1)
+  .map(a => a.validationkey);
+}
+
 function getPaymentsArray(req) {
   return db('payments')
   .select('nonce', 'amount', 'hash')
   .from('payments')
   .where('id', req.user.id)
-  .map(a => [convertTimestamp(a.nonce), a.hash, a.amount]);
+  .map(a => [convertTimestamp(a.nonce), a.hash, (humanReadable(a.amount) + ' LCX')]);
 }
 
 // convert unix timestamp into human readable
@@ -132,5 +143,9 @@ function convertTimestamp(timestamp) {
   time = yyyy + '-' + mm + '-' + dd + ', ' + hh + ':' + min;
   return time;
 };
+
+function humanReadable(amount) {
+  return (amount / 100000000).toFixed(8);
+}
 
 module.exports = router;
