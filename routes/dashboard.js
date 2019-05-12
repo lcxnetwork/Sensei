@@ -18,6 +18,7 @@ router.get('/', permission(), async function(req, res, next) {
   const lastSeen = await Promise.all(lastSeenPromises)
   const paymentsArray = await getPaymentsArray(req);
   const validationKey = await getValidateKey(req);
+  const shares = await getShares(req);
 
   res.render('dashboard', {
     title: 'Dashboard',
@@ -25,6 +26,7 @@ router.get('/', permission(), async function(req, res, next) {
     payments: paymentsArray,
     lastseen: lastSeen,
     validatestring: validationKey,
+    shares: shares,
     user: req.user ? req.user : undefined,
   });
 });
@@ -32,9 +34,17 @@ router.get('/', permission(), async function(req, res, next) {
 router.post('/registernode',  permission(),
 [
   check('ip')
+    .not()
+    .isEmpty()
+    .trim()
+    .escape()
     .isIP()
     .withMessage('Please enter a valid IP Address.'),
   check('port')
+    .not()
+    .isEmpty()
+    .trim()
+    .escape()
     .isPort()
     .withMessage('Please enter a valid port.'),
 ],
@@ -105,6 +115,15 @@ async function getLastShare(ip) {
   }
 }
 
+function getShares(req) {
+  return db('shares')
+  .select('*')
+  .from('shares')
+  .where('id', req.user.id)
+  .limit(1)
+  .map(a => [a.shares, (a.percent / 10000).toFixed(2), numberWithCommas((a.percent/1000000*500.00000000).toFixed(8))]);
+}
+
 function getNodeArray(req) {
   return db('nodes')
   .select('ip')
@@ -146,6 +165,13 @@ function convertTimestamp(timestamp) {
 
 function humanReadable(amount) {
   return (amount / 100000000).toFixed(8);
+}
+
+// function to format numbers with commas like currency
+function numberWithCommas(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
 }
 
 module.exports = router;
