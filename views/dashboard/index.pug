@@ -4,34 +4,6 @@ block content
 	section.columns.is-left
 		.column
 			.box.has-background-white.has-text-centered
-				form(method='post', action='/dashboard/registernode')
-					h1.subtitle.is-size-2.has-text-weight-light.has-text-left Register A Node
-					.field
-					.control.has-icons-left
-						input.input.is-large(type='text' name='ip' placeholder='enter your node ip')
-						span.icon.is-large.is-left
-							i.icon-feed
-					.field
-					.control.has-icons-left
-						input.input.is-large(type='text' name='port' placeholder='enter your rpc port')
-						span.icon.is-large.is-left
-							i.icon-organization
-					hr
-					.control
-						button.button.is-large.is-primary.is-fullwidth(type='submit') Submit
-					br
-					p.has-text-left.has-text-weight-heavy Your Validation Key = #{validatestring}
-					br
-					p.has-text-left Ensure your daemon is reachable from the internet and launch it with these flags:
-					br
-					p.has-text-left Linux:
-					p.has-text-left ./LightChaind --enable-blockexplorer --enable-cors "*" --validate #{validatestring}
-					br
-					p.has-text-left Windows:
-					p.has-text-left LightChaind.exe --enable-blockexplorer --enable-cors "*" --validate #{validatestring}
-	section.columns.is-left
-		.column
-			.box.has-background-white.has-text-centered
 				.column
 					h1.subtitle.is-size-2.has-text-weight-light.has-text-left Node List
 					span.is-size-5
@@ -46,9 +18,6 @@ block content
 								td= lastseen[index]
 								td
 									a.button.btn.btn-sm(href=`/dashboard/deletenode/` + index) Delete
-					p.has-text-left Total Valid Shares in the last 24hrs: #{shares[0][0]}
-					p.has-text-left Percent of Total Shares: #{shares[0][1]}%
-					p.has-text-left Estimated Payout: #{shares[0][2]} LCX
 	section.columns.is-left
 	.column
 		.box.has-background-white.has-text-centered
@@ -64,3 +33,24 @@ block content
 						td
 							a(href='http://explorer.lightchain.net/transaction.html?hash=' + val[1]) #{val[1]}
 						td= val[2]
+	section.columns.is-left
+	.column
+		.box.has-background-white.has-text-centered
+			form(method='post', action='/dashboard/registernode')
+				h1.subtitle.is-size-2.has-text-weight-light.has-text-left Register A Node
+				.field
+				.control.has-icons-left
+					input.input.is-large(type='text' name='ip' placeholder='enter your node ip')
+					span.icon.is-large.is-left
+						i.icon-feed
+				.field
+				.control.has-icons-left
+					input.input.is-large(type='text' name='port' placeholder='enter your rpc port')
+					span.icon.is-large.is-left
+						i.icon-organization
+				hr
+				.control
+					button.button.is-large.is-primary.is-fullwidth(type='submit') Submit
+				br
+				p.has-text-left  Ensure your daemon is reachable from the inteand launch it with these flags:
+				p.has-text-left ./LightChaind --enable-blockexplorer --enable-cors "*" --validate #{validatestring}
