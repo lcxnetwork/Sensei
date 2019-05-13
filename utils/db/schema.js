@@ -46,6 +46,7 @@ db.schema.hasTable('pings').then(function(exists) {
       table.string('id');
       table.string('ip');
       table.string('connectionstring');
+      table.string('nonce');
     });
   }
 });
@@ -69,6 +70,17 @@ db.schema.hasTable('payments').then(function(exists) {
       table.string('nonce');
       table.boolean('pending');
       table.string('hash');
+      table.string('percent');
+    });
+  }
+});
+
+db.schema.hasTable('wallet').then(function(exists) {
+  if (!exists) {
+    return db.schema.createTable('wallet', function(table) {
+      table.string('timestamp');
+      table.string('nonce');
+      table.integer('amount');
     });
   }
 });

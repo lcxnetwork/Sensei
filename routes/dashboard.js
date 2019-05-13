@@ -10,6 +10,7 @@ const permission = require('permission');
 const db = require('../utils/utils').knex;
 const { check } = require('express-validator/check');
 const validateInput = require('../middleware/validateInput');
+const config = require('../config.json');
 
 // Preference Panel
 router.get('/', permission(), async function(req, res, next) {
@@ -19,7 +20,16 @@ router.get('/', permission(), async function(req, res, next) {
   const paymentsArray = await getPaymentsArray(req);
   const validationKey = await getValidateKey(req);
   const shares = await getShares(req);
-
+  const roundNonce = getRoundNonce(Date.now())
+  const roundBalance = await db('wallet')
+        .select('*')
+        .from('wallet')
+        .where({
+            nonce: roundNonce
+        })
+        .map(a => a.amount);
+  const pendingBalance = humanReadable(roundBalance.reduce(add, 0) * shares[0][3])
+  console.log(shares);
   res.render('dashboard', {
     title: 'Dashboard',
     nodes: nodeArray,
@@ -27,6 +37,7 @@ router.get('/', permission(), async function(req, res, next) {
     lastseen: lastSeen,
     validatestring: validationKey,
     shares: shares,
+    pendingbalance: pendingBalance,
     user: req.user ? req.user : undefined,
   });
 });
@@ -115,13 +126,26 @@ async function getLastShare(ip) {
   }
 }
 
+// convert unix timestamp into human readable
+function getRoundNonce(timestamp) {
+  let d = new Date(parseInt(timestamp)) // Convert the passed timestamp to milliseconds
+  let yyyy = d.getFullYear()
+  let mm = ('0' + (d.getMonth() + 1)).slice(-2) // Months are zero based. Add leading 0.
+  let dd = ('0' + d.getDate()).slice(-2) // Add leading 0.
+  let hh = ('0' + d.getHours()).slice(-2) // Add leading 0
+  let roundNonce;
+  // ie: 2013032416
+  roundNonce = yyyy + mm + dd + hh;
+  return roundNonce;
+};
+
 function getShares(req) {
   return db('shares')
   .select('*')
   .from('shares')
   .where('id', req.user.id)
   .limit(1)
-  .map(a => [a.shares, (a.percent / 10000).toFixed(2), numberWithCommas((a.percent/1000000*500.00000000).toFixed(8))]);
+  .map(a => [a.shares, (a.percent / 10000).toFixed(2), numberWithCommas((a.percent/1000000*500.00000000).toFixed(8)), (a.percent / 1000000)]);
 }
 
 function getNodeArray(req) {
@@ -172,6 +196,10 @@ function numberWithCommas(x) {
     var parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
+}
+
+function add(accumulator, a) {
+    return accumulator + a;
 }
 
 module.exports = router;
