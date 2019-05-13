@@ -1,4 +1,4 @@
-# Sensei Node Manager
+# Sensei -- Node Manager
 
 ![Screenshot](https://raw.githubusercontent.com/lcxnetwork/SenseiNode/development/screenshot.png "screenshot of sensei node manager")
 
