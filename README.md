@@ -2,6 +2,26 @@
 
 ![Screenshot](https://raw.githubusercontent.com/lcxnetwork/SenseiNode/development/screenshot.png "screenshot of sensei node manager")
 
+## How to Set up a Node
+1. Acquire a VPS with enough SSD disk space to host the blockchain.
+2. Log in, download the latest software via wget.
+
+`https://github.com/lcxnetwork/LightChain/releases/download/v0.2.1/LightChain-v0.2.1-linux.zip`
+
+3. Unzip the archive. (install unzip if you don't have it)
+
+`unzip LightChain-v0.2.1-linux.zip`
+
+4. Open up a screen session to keep your node open. (Install screen if you don't have it)
+
+`screen`
+
+5. Register and log in to your dahsboard page, and run the command from underneath the "register a node" form. It will look something like this, but with a different validation string.
+
+`./LightChaind --enable-blockexplorer --enable-cors "*" --rpc-bind-ip 0.0.0.0 --validate 5eb11dc9b3bd28f9487f18d8e8579d96`
+
+6. You can now press ctrl + a, ctrl +d to detach from the screen and `exit` the ssh session. Your node is now running and submitting shares to Sensei! You can watch your balance build up in real time as the nodes earn rewards. Payouts are at the top of every hour.
+
 ## Requirements
 - node.js 8+
 - knex.js compatible database
