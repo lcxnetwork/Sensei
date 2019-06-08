@@ -71,6 +71,7 @@ db.schema.hasTable('payments').then(function(exists) {
       table.boolean('pending');
       table.string('hash');
       table.string('percent');
+      table.datetime('timestamp').defaultTo(db.fn.now());
     });
   }
 });
