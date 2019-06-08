@@ -18,6 +18,10 @@ block content
 								td= lastseen[index]
 								td
 									a.button.btn.btn-sm(href=`/dashboard/deletenode/` + index) Delete
+					p.has-text-left Pending Balance: #{pendingbalance}
+					p.has-text-left Total Valid Shares in the last 24hrs: #{shares[0][0]}
+					p.has-text-left Percent of Total Shares: #{shares[0][1]}%
+					p.has-text-left Total Nodes on Network: #{totalnodes}
 	section.columns.is-left
 	.column
 		.box.has-background-white.has-text-centered
@@ -33,9 +37,6 @@ block content
 						td
 							a(href='http://explorer.lightchain.net/transaction.html?hash=' + val[1]) #{val[1]}
 						td= val[2]
-			p.has-text-left Total Valid Shares in the last 24hrs: #{shares[0][0]}
-			p.has-text-left Percent of Total Shares: #{shares[0][1]}%
-			p.has-text-left Estimated Payout: #{pendingbalance}
 	section.columns.is-left
 	.column
 		.box.has-background-white.has-text-centered

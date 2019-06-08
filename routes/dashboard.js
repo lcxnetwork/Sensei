@@ -18,9 +18,11 @@ router.get('/', permission(), async function(req, res, next) {
   const lastSeenPromises = nodeArray.map(item => getLastShare(item));
   const lastSeen = await Promise.all(lastSeenPromises)
   const paymentsArray = await getPaymentsArray(req);
+  console.log(paymentsArray);
   const validationKey = await getValidateKey(req);
   const shares = await getShares(req);
   const roundNonce = getRoundNonce(Date.now())
+  const totalNodes = await getTotalNodes();
   const roundBalance = await db('wallet')
         .select('*')
         .from('wallet')
@@ -29,7 +31,7 @@ router.get('/', permission(), async function(req, res, next) {
         })
         .map(a => a.amount);
   const pendingBalance = humanReadable(roundBalance.reduce(add, 0) * shares[0][3])
-  console.log(shares);
+
   res.render('dashboard', {
     title: 'Dashboard',
     nodes: nodeArray,
@@ -38,6 +40,7 @@ router.get('/', permission(), async function(req, res, next) {
     validatestring: validationKey,
     shares: shares,
     pendingbalance: pendingBalance,
+    totalnodes: totalNodes,
     user: req.user ? req.user : undefined,
   });
 });
@@ -156,6 +159,16 @@ function getNodeArray(req) {
   .map(a => a.ip);
 }
 
+async function getTotalNodes() {
+  const nodes = await db('nodes')
+  .select('ip')
+  .from('nodes')
+  .map(a => a.ip);
+  return nodes.length;
+}
+
+
+
 function getValidateKey(req) {
   return db('users')
   .select('validationkey')
@@ -167,10 +180,12 @@ function getValidateKey(req) {
 
 function getPaymentsArray(req) {
   return db('payments')
-  .select('nonce', 'amount', 'hash')
+  .select('timestamp', 'amount', 'hash')
   .from('payments')
+  .orderBy('timestamp', 'desc')
   .where('id', req.user.id)
-  .map(a => [convertTimestamp(a.nonce), a.hash, (humanReadable(a.amount) + ' LCX')]);
+  // .limit(10)
+  .map(a => [a.timestamp, a.hash, (humanReadable(a.amount) + ' LCX')]);
 }
 
 // convert unix timestamp into human readable
