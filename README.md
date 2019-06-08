@@ -20,7 +20,11 @@
 
 `cd LightChain-v0.2.1-linux.zip`
 
-6. Register and log in to your dahsboard page, and run the command from underneath the "register a node" form. It will look something like this, but with a different validation string.
+6. Register and log in to your dashboard page here: 
+
+https://nodes.lightchain.net/
+
+and run the command from underneath the "register a node" form. It will look something like this, but with a different validation string.
 
 `./LightChaind --validate 5eb11dc9b3bd28f9487f18d8e8579d96 --enable-blockexplorer --enable-cors "*" --rpc-bind-ip 0.0.0.0`
 
