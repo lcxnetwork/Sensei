@@ -23,7 +23,7 @@
     "express-session": "^1.15.6",
     "express-validator": "^5.3.1",
     "helmet": "^3.16.0",
-    "knex": "^0.15.2",
+    "knex": "^0.19.5",
     "lightchain-wallet-backend": "^1.0.0",
     "moment": "^2.24.0",
     "morgan": "~1.9.1",
