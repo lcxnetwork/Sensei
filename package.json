@@ -10,7 +10,7 @@
   "dependencies": {
     "amqplib": "^0.5.3",
     "axios": "^0.18.0",
-    "bcrypt": "^3.0.5",
+    "bcrypt": "^5.0.0",
     "body-parser": "~1.18.3",
     "compression": "^1.7.4",
     "connect-flash": "^0.1.1",
